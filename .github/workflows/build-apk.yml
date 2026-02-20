@@ -18,14 +18,17 @@ jobs:
           node-version: 18.x
           cache: 'npm'
 
-      - name: 🏗 Setup EAS
-        uses: expo/expo-github-action@v8
-        with:
-          eas-version: latest
-          token: ${{ secrets.EXPO_TOKEN }}
-
       - name: 📦 Install dependencies
-        run: npm install  # Changed from npm ci to npm install
+        run: |
+          npm install --force
+          npm install -g eas-cli
+
+      - name: 🔑 Setup Expo Token
+        run: echo "EXPO_TOKEN=${{ secrets.EXPO_TOKEN }}" >> $GITHUB_ENV
 
       - name: 🚀 Build APK
-        run: eas build --platform android --profile preview --non-interactive --no-wait
+        run: |
+          npx eas-cli build --platform android \
+            --profile preview \
+            --non-interactive \
+            --no-wait
