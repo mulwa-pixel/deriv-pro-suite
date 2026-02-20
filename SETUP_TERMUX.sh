@@ -1,41 +1,22 @@
 #!/data/data/com.termux/files/usr/bin/bash
-# Deriv Pro Suite — Termux Setup Script
-# Run this ONCE after unzipping the project
+# Deriv Pro Suite — Termux Setup
+# Run once after extracting the zip
 
-set -e
-echo ""
-echo "╔══════════════════════════════════════╗"
-echo "║   DERIV PRO SUITE — SETUP SCRIPT    ║"
-echo "╚══════════════════════════════════════╝"
-echo ""
-
-# Update Termux packages
-echo "[1/5] Updating Termux packages..."
+echo "Setting up Deriv Pro Suite..."
 pkg update -y && pkg upgrade -y
+pkg install nodejs git curl -y
 
-# Install Node.js
-echo "[2/5] Installing Node.js..."
-pkg install nodejs -y
+cd ~/derivpro 2>/dev/null || { mkdir ~/derivpro && cd ~/derivpro; }
 
-# Install watchman (needed by Metro bundler)
-echo "[3/5] Installing build tools..."
-pkg install python make gcc binutils -y 2>/dev/null || true
-
-# Move to project folder
-echo "[4/5] Installing npm packages..."
-cd ~/derivpro
+echo "Installing npm packages..."
 npm install --legacy-peer-deps
 
-# Done
 echo ""
-echo "╔══════════════════════════════════════╗"
-echo "║         SETUP COMPLETE ✓             ║"
-echo "╚══════════════════════════════════════╝"
+echo "✅ Setup complete!"
 echo ""
-echo "To start the app:"
-echo "  cd ~/derivpro"
-echo "  npx expo start"
+echo "TO RUN (Expo Go — quick, for testing):"
+echo "  cd ~/derivpro && npx expo start"
 echo ""
-echo "Then scan the QR code with Expo Go app"
-echo "(install from Play Store if not already)"
+echo "TO BUILD STANDALONE APK (permanent install, no Expo Go):"
+echo "  cd ~/derivpro && bash BUILD_APK_NOW.sh"
 echo ""
