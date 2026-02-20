@@ -26,7 +26,13 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.derivpro.suite"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "69135e61-bc7d-4390-92a1-200ecad691e9"
+      }
+    },
+    "owner": "alexpintoh3332"
   },
   "extra": {
     "eas": {
