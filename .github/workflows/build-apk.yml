@@ -29,12 +29,14 @@ jobs:
       - name: 🚀 Build APK
         run: |
           eas build --platform android \
-            --profile production \
-            --non-interactive \
-            --output=app-release.apk
+            --profile preview \
+            --non-interactive
 
-      - name: 📤 Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: deriv-pro-suite-apk
-          path: app-release.apk
+      - name: ✅ Build Complete
+        run: |
+          echo "=========================================="
+          echo "✅ BUILD TRIGGERED SUCCESSFULLY!"
+          echo "=========================================="
+          echo "📱 Download your APK from Expo website:"
+          echo "https://expo.dev/accounts/alexpintoh3332/projects/deriv-pro-suite/builds"
+          echo "=========================================="
