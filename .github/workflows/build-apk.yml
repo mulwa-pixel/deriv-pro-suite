@@ -20,7 +20,7 @@ jobs:
 
       - name: 📦 Install dependencies
         run: |
-          npm install --force
+          npm install
           npm install -g eas-cli
 
       - name: 🔑 Setup Expo Token
@@ -28,7 +28,13 @@ jobs:
 
       - name: 🚀 Build APK
         run: |
-          npx eas-cli build --platform android \
+          eas build --platform android \
             --profile preview \
             --non-interactive \
-            --no-wait
+            --output=app-release.apk
+
+      - name: 📤 Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: deriv-pro-suite-apk
+          path: app-release.apk
