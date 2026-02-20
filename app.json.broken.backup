@@ -1,0 +1,31 @@
+{
+  "expo": {
+    "name": "Deriv Pro Suite",
+    "slug": "deriv-pro-suite",
+    "version": "3.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#04070f",
+    "splash": {
+      "backgroundColor": "#04070f"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "android": {
+      "package": "com.derivpro.suite",
+      "adaptiveIcon": {
+        "backgroundColor": "#04070f"
+      },
+      "permissions": [
+        "INTERNET",
+        "ACCESS_NETWORK_STATE"
+      ],
+      "allowBackup": false
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.derivpro.suite"
+    },
+
+}

@@ -1,0 +1,43 @@
+# HOW TO BUILD A STANDALONE APK
+# Two methods — choose whichever works for you
+
+## METHOD 1: EAS Build (Easiest — cloud build, no setup needed)
+# This builds the APK in Expo's cloud servers. FREE for 30 builds/month.
+
+Step 1 — In Termux:
+  pkg install nodejs -y
+  cd ~/derivpro
+  npm install
+  npm install -g eas-cli
+
+Step 2 — Create free Expo account at expo.dev then login:
+  eas login
+
+Step 3 — Build APK (takes ~10-15 min, done in cloud):
+  eas build --platform android --profile preview
+
+Step 4 — When done, EAS gives you a download link.
+  Download the .apk and install it on your phone.
+  Enable "Install from unknown sources" in Android settings first.
+
+Done — fully independent .apk, no Expo Go, no Termux needed to run it.
+
+---
+
+## METHOD 2: Buildozer via Pydroid (experimental, slower)
+# Not recommended — React Native doesn't use Buildozer (that's for Python/Kivy)
+
+---
+
+## METHOD 3: GitHub Actions (free, automatic)
+# Push code to GitHub, Actions builds APK automatically.
+# See .github/workflows/build.yml (we'll add this if you want)
+
+---
+
+## FASTEST RIGHT NOW — Keep using Expo Go but make it one tap:
+# While building APK, create a shortcut so Expo Go opens instantly:
+# 1. Long-press Expo Go app
+# 2. It shows your recent projects — your app should be there
+# 3. Long-press the app icon within Expo Go → Add to Home Screen
+# This gives you a one-tap shortcut on your home screen.
