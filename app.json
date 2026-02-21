@@ -33,11 +33,6 @@
       "bundleIdentifier": "com.derivpro.suite"
     },
     "plugins": []
-  }
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.derivpro.suite"
-    }
   },
   "extra": {
     "eas": {
