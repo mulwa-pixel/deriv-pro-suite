@@ -16,6 +16,7 @@ export const C = {
   // ACCENTS — Money Heist palette
   ac:   '#e63946',    // Dali red (primary accent)
   ac2:  '#c1121f',    // deep red
+  re:   '#e63946',    // alias: red (same as ac, used throughout UI)
   gr:   '#06d6a0',    // terminal green
   ye:   '#ffd166',    // gold
   or:   '#f77f00',    // orange

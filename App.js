@@ -25,6 +25,8 @@ import BotsScreen        from './src/screens/BotsScreen';
 import DBotScreen        from './src/screens/DBotScreen';
 import TradePadScreen    from './src/screens/TradePadScreen';
 import SignalScreen      from './src/screens/SignalScreen';
+import AnalysisScreen    from './src/screens/AnalysisScreen';
+import QuantLabScreen    from './src/screens/QuantLabScreen';
 import LogScreen         from './src/screens/LogScreen';
 import GuideScreen       from './src/screens/GuideScreen';
 import SettingsScreen    from './src/screens/SettingsScreen';
@@ -40,6 +42,7 @@ function buildSnapshot(bufs, digBuf) {
   const prices = {};
   SYMS.forEach(s => { prices[s] = bufs[s] ? [...bufs[s]] : []; });
   const digits = [...digBuf];
+  // No need to copy digBySymRef — Analysis screen reads it directly
   const conf   = calcConfluence(prices['R_75'] || [], digits, utcH);
   const lastTick = {}, prevTick = {};
   SYMS.forEach(s => {
@@ -54,8 +57,9 @@ function buildSnapshot(bufs, digBuf) {
 function useWS() {
   const wsRef    = useRef(null);
   const bufsRef  = useRef({});
-  const digRef   = useRef([]);
-  const dirtyRef = useRef(false);
+  const digRef      = useRef([]);
+  const digBySymRef = useRef({});   // per-symbol digit history (all 6 markets)
+  const dirtyRef    = useRef(false);
   const timerRef = useRef(null);
   const aidRef   = useRef('');
   const tokRef   = useRef('');
@@ -116,7 +120,14 @@ function useWS() {
         if (d.msg_type === 'history') {
           const sym = d.echo_req?.ticks_history;
           if (sym && d.history?.prices) {
-            bufsRef.current[sym] = d.history.prices.map(parseFloat);
+            const prices = d.history.prices.map(parseFloat);
+            bufsRef.current[sym] = prices;
+            // Populate per-symbol digit buffer from bulk history
+            // so QuantEngine gets data immediately after connect
+            digBySymRef.current[sym] = prices.map(p => getLastDigit(p));
+            if (sym === 'R_75') {
+              digRef.current = digBySymRef.current[sym].slice(-200);
+            }
             dirtyRef.current = true;
           }
         }
@@ -126,6 +137,11 @@ function useWS() {
           if (!bufsRef.current[sym]) bufsRef.current[sym] = [];
           bufsRef.current[sym].push(price);
           if (bufsRef.current[sym].length > MAX_BUF) bufsRef.current[sym].shift();
+          // Collect digits for ALL symbols (Analysis screen needs them per-market)
+          if (!digBySymRef.current[sym]) digBySymRef.current[sym] = [];
+          digBySymRef.current[sym].push(getLastDigit(price));
+          if (digBySymRef.current[sym].length > 1100) digBySymRef.current[sym].shift();
+          // Keep legacy digRef for R_75
           if (sym === 'R_75') {
             digRef.current.push(getLastDigit(price));
             if (digRef.current.length > 200) digRef.current.shift();
@@ -157,7 +173,7 @@ function useWS() {
     if (timerRef.current) clearInterval(timerRef.current);
   }, []);
 
-  return { snap, wsRef, balance, connected, connStatus, connect, disconnect };
+  return { snap, wsRef, digBySymRef, balance, connected, connStatus, connect, disconnect };
 }
 
 // ── Tab icons ─────────────────────────────────────────────────────────────────
@@ -167,6 +183,9 @@ const TAB_ICONS = {
   Chart:     'trending-up',
   Ticks:     'pulse',
   Scanner:   'search',
+  QuantLab:  'flask',
+  Analysis:  'analytics',
+  Bots:      'cube',
   Trade:     'flash',
   DBot:      'hardware-chip',
   Log:       'list',
@@ -261,11 +280,12 @@ export default function App() {
     trades, config,
     connect:    ws.connect,
     disconnect: ws.disconnect,
-    _wsRef:     ws.wsRef,    // trade engine needs raw WS ref
+    _wsRef:        ws.wsRef,        // trade engine needs raw WS ref
+    _digBySymRef:  ws.digBySymRef,   // per-symbol digit history for Analysis tab
     sym: 'R_75',
   }), [
     ws.snap, ws.connected, ws.connStatus, ws.balance,
-    ws.wsRef, trades, config,
+    ws.wsRef, ws.digBySymRef, trades, config,
   ]);
 
   if (booting) return (
@@ -306,6 +326,12 @@ export default function App() {
           >
             <Tab.Screen name="Dashboard"
               children={() => <DashboardScreen state={sharedState}/>}/>
+            <Tab.Screen name="QuantLab"
+              children={() => <QuantLabScreen state={sharedState}/>}
+              options={{ tabBarLabel:'Quant' }}/>
+            <Tab.Screen name="Analysis"
+              children={() => <AnalysisScreen state={sharedState}/>}
+              options={{ tabBarLabel:'Digits' }}/>
             <Tab.Screen name="Signal"
               children={() => <SignalScreen state={sharedState}/>}
               options={{ tabBarLabel:'Signal' }}/>
@@ -320,6 +346,9 @@ export default function App() {
             <Tab.Screen name="Trade"
               children={() => <TradePadScreen state={sharedState}/>}
               options={{ tabBarLabel:'Trade' }}/>
+            <Tab.Screen name="Bots"
+              children={() => <BotsScreen/>}
+              options={{ tabBarLabel:'Bots' }}/>
             <Tab.Screen name="DBot"
               children={() => <DBotScreen state={sharedState}/>}
               options={{ tabBarLabel:'DBot' }}/>
