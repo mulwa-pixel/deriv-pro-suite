@@ -1,42 +1,38 @@
-name: Build DerivProSuite APK
+name: Build APK
 
 on:
   push:
-    branches: [ main ]
-  workflow_dispatch:
+    branches: [main]
+  workflow_dispatch:   # allows manual trigger from GitHub UI
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: 🏗 Setup repo
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: 🏗 Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18.x
+          node-version: 20
           cache: 'npm'
 
-      - name: 📦 Install dependencies
-        run: |
-          npm install
-          npm install -g eas-cli
+      - name: Setup Expo / EAS
+        uses: expo/expo-github-action@v8
+        with:
+          expo-version: latest
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: 🔑 Setup Expo Token
-        run: echo "EXPO_TOKEN=${{ secrets.EXPO_TOKEN }}" >> $GITHUB_ENV
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
 
-      - name: 🚀 Build APK
-        run: |
-          eas build --platform android \
-            --profile preview \
-            --non-interactive
+      - name: Build APK
+        run: eas build --platform android --profile preview --non-interactive
 
-      - name: ✅ Build Complete
+      - name: Get APK download URL
         run: |
-          echo "=========================================="
-          echo "✅ BUILD TRIGGERED SUCCESSFULLY!"
-          echo "=========================================="
-          echo "📱 Download your APK from Expo website:"
-          echo "https://expo.dev/accounts/alexpintoh3332/projects/deriv-pro-suite/builds"
-          echo "=========================================="
+          URL=$(eas build:list --platform android --limit 1 --json 2>/dev/null | python3 -c "import sys,json; b=json.load(sys.stdin); print(b[0].get('artifacts',{}).get('buildUrl',''))" 2>/dev/null || echo "")
+          echo "APK_URL=$URL" >> $GITHUB_ENV
+          echo "Build URL: $URL"

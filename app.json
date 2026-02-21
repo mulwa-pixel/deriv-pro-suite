@@ -1,28 +1,39 @@
 {
   "expo": {
-    "name": "Deriv Pro Suite",
+    "name": "DerivPro Quant",
     "slug": "deriv-pro-suite",
-    "version": "12.0.0",
+    "version": "5.1.0",
     "orientation": "portrait",
     "userInterfaceStyle": "dark",
-    "backgroundColor": "#04070f",
+    "backgroundColor": "#050508",
+    "primaryColor": "#e63946",
+    "icon": "./assets/icon.png",
     "splash": {
-      "backgroundColor": "#04070f"
+      "backgroundColor": "#050508",
+      "resizeMode": "contain"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "android": {
       "package": "com.derivpro.suite",
+      "versionCode": 12,
       "adaptiveIcon": {
-        "backgroundColor": "#04070f"
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#e63946"
       },
       "permissions": [
-        "INTERNET",
-        "ACCESS_NETWORK_STATE"
+        "android.permission.INTERNET",
+        "android.permission.ACCESS_NETWORK_STATE"
       ],
       "allowBackup": false
     },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.derivpro.suite"
+    },
+    "plugins": []
+  }
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.derivpro.suite"
