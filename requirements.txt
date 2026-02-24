@@ -1,0 +1,12 @@
+Flask==2.3.3
+flask-cors==4.0.0
+flask-socketio==5.3.4
+pandas==2.0.3
+numpy==1.24.3
+websocket-client==1.6.1
+requests==2.31.0
+python-dotenv==1.0.0
+sqlalchemy==2.0.19
+apscheduler==3.10.4
+redis==5.0.0
+gunicorn==21.2.0
