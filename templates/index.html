@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deriv Pro Suite - Smart Trading Platform</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <h1>📊 Deriv Pro Suite</h1>
+            </div>
+            <div class="nav-links">
+                <a href="/" class="active">Dashboard</a>
+                <a href="/scanner">Live Scanner</a>
+                <a href="/trades">Trade History</a>
+                <a href="/settings">Settings</a>
+            </div>
+            <div class="nav-status">
+                <span class="status-indicator live"></span>
+                <span>Live</span>
+                <span class="balance">$1,234.56</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Trading Hours Alert -->
+        <div class="alert info" id="trading-hours-alert">
+            <span>🕐 Trading Hours: 08:00 - 20:00 UTC</span>
+            <span class="current-time"></span>
+        </div>
+
+        <!-- Market Overview -->
+        <section class="market-overview">
+            <h2>Market Overview</h2>
+            <div class="market-grid" id="market-grid">
+                <!-- Populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Bot Scanner -->
+        <section class="bot-scanner">
+            <div class="section-header">
+                <h2>Live Bot Scanner</h2>
+                <button class="btn-refresh" onclick="refreshScanner()">
+                    🔄 Refresh
+                </button>
+            </div>
+            <div class="scanner-table-container">
+                <table class="scanner-table" id="scanner-table">
+                    <thead>
+                        <tr>
+                            <th>Bot</th>
+                            <th>V75</th>
+                            <th>V100</th>
+                            <th>V50</th>
+                            <th>V25</th>
+                            <th>V10</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Active Signals -->
+        <section class="active-signals">
+            <h2>Active Signals</h2>
+            <div class="signals-grid" id="signals-grid">
+                <!-- Populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Quick Trade Panel -->
+        <section class="quick-trade">
+            <h2>Quick Trade</h2>
+            <div class="trade-panel">
+                <div class="trade-controls">
+                    <select id="trade-bot">
+                        <option value="3">Bot #3 - Berlin X9</option>
+                        <option value="4">Bot #4 - BeastO7</option>
+                        <option value="5">Bot #5 - Gas Hunter</option>
+                        <option value="6">Bot #6 - Hawk Under5</option>
+                    </select>
+                    <select id="trade-market">
+                        <option value="V75">V75</option>
+                        <option value="V100">V100</option>
+                        <option value="V50">V50</option>
+                        <option value="V25">V25</option>
+                        <option value="V10">V10</option>
+                    </select>
+                    <input type="number" id="trade-stake" placeholder="Stake ($)" min="1" step="1">
+                    <button class="btn-trade" onclick="executeTrade()">Execute Trade</button>
+                </div>
+                <div class="trade-info" id="trade-info">
+                    <!-- Trade info and warnings -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="/static/js/main.js"></script>
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>
