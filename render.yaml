@@ -6,7 +6,7 @@ services:
     startCommand: gunicorn -k eventlet -w 1 app:app
     envVars:
       - key: DERIV_APP_ID
-        value: your_app_id_here
+        value: 129103
       - key: DERIV_API_TOKEN
         sync: false
       - key: SECRET_KEY
