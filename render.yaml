@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: deriv-pro-suite
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn -k eventlet -w 1 app:app
+    envVars:
+      - key: DERIV_APP_ID
+        value: your_app_id_here
+      - key: DERIV_API_TOKEN
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: deriv-db
+          property: connectionString
+
+databases:
+  - name: deriv-db
+    databaseName: deriv_trading
+    user: deriv_user
